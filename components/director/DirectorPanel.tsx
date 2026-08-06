@@ -1,6 +1,10 @@
+"use client";
+
+import { DirectorResponse } from "@/types/director";
+
 interface Props {
   loading: boolean;
-  result: string;
+  result: DirectorResponse | null;
 }
 
 export default function DirectorPanel({
@@ -8,35 +12,31 @@ export default function DirectorPanel({
   result,
 }: Props) {
   return (
-    <div className="rounded-3xl bg-slate-900 border border-slate-800 p-8 h-full">
+    <div className="rounded-3xl bg-slate-900 p-8 min-h-[520px]">
 
-      <h2 className="text-2xl font-bold text-cyan-400">
+      <h2 className="text-3xl font-bold text-cyan-400">
         🤖 Director IA
       </h2>
 
       {!loading && !result && (
-        <div className="mt-6 text-slate-400">
-          Esperando instrucciones...
+        <div className="mt-8 text-slate-400">
+          Esperando un proyecto...
         </div>
       )}
 
       {loading && (
-        <div className="mt-6 space-y-4">
+        <div className="mt-8 space-y-4">
 
           <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            📷 Analizando fotografía...
+            📷 Analizando imagen...
           </div>
 
           <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            🎬 Creando guion...
+            🎬 Escribiendo guion...
           </div>
 
           <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            📖 Construyendo storyboard...
-          </div>
-
-          <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            🎨 Generando prompts...
+            📖 Creando storyboard...
           </div>
 
           <div className="animate-pulse rounded-xl bg-slate-800 p-4">
@@ -47,35 +47,88 @@ export default function DirectorPanel({
       )}
 
       {!loading && result && (
-        <div className="mt-6 space-y-4">
 
-          <div className="rounded-xl bg-slate-800 p-4">
+        <div className="mt-8 space-y-6">
+
+          <section>
+
             <h3 className="font-bold text-cyan-400">
               📋 Resumen
             </h3>
 
             <p className="mt-2 text-slate-300">
-              {result}
+              {result.summary}
             </p>
-          </div>
 
-          <div className="rounded-xl bg-slate-800 p-4">
-            🎬 Guion listo
-          </div>
+          </section>
 
-          <div className="rounded-xl bg-slate-800 p-4">
-            📖 Storyboard listo
-          </div>
+          <section>
 
-          <div className="rounded-xl bg-slate-800 p-4">
-            🎨 Prompts IA listos
-          </div>
+            <h3 className="font-bold text-cyan-400">
+              🎬 Guion
+            </h3>
 
-          <div className="rounded-xl bg-slate-800 p-4">
-            📱 Marketing listo
-          </div>
+            <p className="mt-2 text-slate-300">
+              {result.script}
+            </p>
+
+          </section>
+
+          <section>
+
+            <h3 className="font-bold text-cyan-400">
+              📖 Storyboard
+            </h3>
+
+            <ul className="mt-2 space-y-2">
+
+              {result.storyboard.map((scene, index) => (
+                <li key={index}>
+                  • {scene}
+                </li>
+              ))}
+
+            </ul>
+
+          </section>
+
+          <section>
+
+            <h3 className="font-bold text-cyan-400">
+              📱 Instagram
+            </h3>
+
+            <p className="mt-2">
+              {result.instagram}
+            </p>
+
+          </section>
+
+          <section>
+
+            <h3 className="font-bold text-cyan-400">
+              🏷️ Hashtags
+            </h3>
+
+            <div className="mt-2 flex flex-wrap gap-2">
+
+              {result.hashtags.map((tag) => (
+
+                <span
+                  key={tag}
+                  className="rounded-full bg-cyan-500/20 px-3 py-1 text-cyan-300"
+                >
+                  {tag}
+                </span>
+
+              ))}
+
+            </div>
+
+          </section>
 
         </div>
+
       )}
 
     </div>
