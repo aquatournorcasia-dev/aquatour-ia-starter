@@ -2,6 +2,7 @@
 
 import { ImagePlus } from "lucide-react";
 import { useRef, useState } from "react";
+import DirectorPanel from "../director/DirectorPanel";
 
 type Campaign = {
   title: string;
@@ -53,10 +54,14 @@ export default function CinemaDashboard() {
     alert("Aquí conectaremos Director IA en la siguiente Feature.");
 
     setLoading(false);
+
+    setResult(
+  "Proyecto generado correctamente. Director IA preparó la estructura inicial."
+    );
   }
 
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-3 gap-8">
 
       <div>
 
@@ -103,7 +108,10 @@ export default function CinemaDashboard() {
       </div>
 
       <div className="rounded-3xl bg-slate-900 p-8 space-y-5">
-
+        <DirectorPanel
+         loading={loading}
+         result={result}
+        />
         <h2 className="text-3xl font-bold">
           Brief Creativo IA
         </h2>
