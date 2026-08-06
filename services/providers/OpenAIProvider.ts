@@ -1,8 +1,13 @@
+import OpenAI from "openai";
+
 import { AIProvider } from "./AIProvider";
 
 import { PromptPayload } from "@/services/prompt/promptBuilder";
-
 import { DirectorResponse } from "@/types/director";
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export class OpenAIProvider implements AIProvider {
 
@@ -10,60 +15,39 @@ export class OpenAIProvider implements AIProvider {
     prompt: PromptPayload
   ): Promise<DirectorResponse> {
 
-    console.log("========== SYSTEM ==========");
-    console.log(prompt.system);
+    const response = await client.responses.create({
 
-    console.log("========== USER ==========");
-    console.log(prompt.user);
+      model: process.env.OPENAI_MODEL ?? "gpt-5",
 
-    /**
-     * Próximamente aquí conectaremos OpenAI.
-     */
+      input: [
 
-    return {
+        {
+          role: "system",
+          content: prompt.system,
+        },
 
-      summary:
-        "Respuesta simulada desde OpenAI Provider.",
-
-      script:
-`
-ESCENA 1
-
-Drone.
-
-ESCENA 2
-
-Experiencia.
-
-ESCENA 3
-
-Reserva.
-`,
-
-      storyboard: [
-
-        "Drone",
-
-        "Turistas",
-
-        "Reserva"
+        {
+          role: "user",
+          content: prompt.user,
+        },
 
       ],
 
-      instagram:
-`
-Contenido generado por OpenAI Provider.
-`,
+    });
 
-      hashtags: [
+    const text = response.output_text;
 
-        "#StudioOS",
+    try {
 
-        "#AquaTour"
+      return JSON.parse(text) as DirectorResponse;
 
-      ]
+    } catch {
 
-    };
+      throw new Error(
+        "La IA respondió un formato diferente al JSON esperado."
+      );
+
+    }
 
   }
 
