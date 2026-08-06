@@ -7,6 +7,24 @@ interface Props {
   result: DirectorResponse | null;
 }
 
+function Card({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-700 bg-slate-800 p-5">
+      <h3 className="mb-3 text-lg font-bold text-cyan-400">
+        {title}
+      </h3>
+
+      {children}
+    </div>
+  );
+}
+
 export default function DirectorPanel({
   loading,
   result,
@@ -19,116 +37,86 @@ export default function DirectorPanel({
       </h2>
 
       {!loading && !result && (
-        <div className="mt-8 text-slate-400">
-          Esperando un proyecto...
+        <div className="mt-8 rounded-2xl border border-dashed border-slate-700 p-8 text-center">
+
+          <h3 className="text-xl font-semibold">
+            Esperando un proyecto...
+          </h3>
+
+          <p className="mt-3 text-slate-400">
+            Sube una fotografía, completa el Brief Creativo
+            y presiona <b>Iniciar Producción IA</b>.
+          </p>
+
         </div>
       )}
 
       {loading && (
         <div className="mt-8 space-y-4">
 
-          <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            📷 Analizando imagen...
-          </div>
-
-          <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            🎬 Escribiendo guion...
-          </div>
-
-          <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            📖 Creando storyboard...
-          </div>
-
-          <div className="animate-pulse rounded-xl bg-slate-800 p-4">
-            📱 Preparando marketing...
-          </div>
+          {[
+            "📷 Analizando fotografía",
+            "🎯 Interpretando objetivo",
+            "🎬 Escribiendo guion",
+            "📖 Diseñando storyboard",
+            "📱 Preparando contenido",
+          ].map((step) => (
+            <div
+              key={step}
+              className="animate-pulse rounded-xl bg-slate-800 p-4"
+            >
+              {step}...
+            </div>
+          ))}
 
         </div>
       )}
 
       {!loading && result && (
+        <div className="mt-8 space-y-5">
 
-        <div className="mt-8 space-y-6">
-
-          <section>
-
-            <h3 className="font-bold text-cyan-400">
-              📋 Resumen
-            </h3>
-
-            <p className="mt-2 text-slate-300">
+          <Card title="📋 Resumen">
+            <p className="whitespace-pre-line text-slate-300">
               {result.summary}
             </p>
+          </Card>
 
-          </section>
-
-          <section>
-
-            <h3 className="font-bold text-cyan-400">
-              🎬 Guion
-            </h3>
-
-            <p className="mt-2 text-slate-300">
+          <Card title="🎬 Guion">
+            <p className="whitespace-pre-line text-slate-300">
               {result.script}
             </p>
+          </Card>
 
-          </section>
-
-          <section>
-
-            <h3 className="font-bold text-cyan-400">
-              📖 Storyboard
-            </h3>
-
-            <ul className="mt-2 space-y-2">
-
+          <Card title="📖 Storyboard">
+            <ul className="space-y-2">
               {result.storyboard.map((scene, index) => (
                 <li key={index}>
-                  • {scene}
+                  {index + 1}. {scene}
                 </li>
               ))}
-
             </ul>
+          </Card>
 
-          </section>
-
-          <section>
-
-            <h3 className="font-bold text-cyan-400">
-              📱 Instagram
-            </h3>
-
-            <p className="mt-2">
+          <Card title="📱 Copy para Instagram">
+            <p className="whitespace-pre-line text-slate-300">
               {result.instagram}
             </p>
+          </Card>
 
-          </section>
-
-          <section>
-
-            <h3 className="font-bold text-cyan-400">
-              🏷️ Hashtags
-            </h3>
-
-            <div className="mt-2 flex flex-wrap gap-2">
-
+          <Card title="🏷️ Hashtags">
+            <div className="flex flex-wrap gap-2">
               {result.hashtags.map((tag) => (
-
                 <span
                   key={tag}
-                  className="rounded-full bg-cyan-500/20 px-3 py-1 text-cyan-300"
+                  className="rounded-full bg-cyan-500/20 px-3 py-1 text-sm text-cyan-300"
                 >
                   {tag}
                 </span>
-
               ))}
-
             </div>
-
-          </section>
+          </Card>
 
         </div>
-
       )}
 
     </div>

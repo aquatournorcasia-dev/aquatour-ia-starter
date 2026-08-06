@@ -6,73 +6,83 @@ import {
 export async function generateProject(
   request: DirectorRequest
 ): Promise<DirectorResponse> {
+  const destination =
+    request.title || "Experiencia AquaTour Norcasia";
+
+  const audience =
+    request.audience || "turistas";
+
+  const objective =
+    request.objective || "promocionar el destino";
+
+  const platform =
+    request.platform || "Instagram";
+
+  const style =
+    request.style || "Cinematográfico";
+
+  const duration =
+    request.duration || "30 segundos";
 
   const summary = `
-Campaña "${request.title}" dirigida a ${request.audience}
-para ${request.platform}.
+Se creó una campaña para ${audience}
+con el objetivo de ${objective}.
+
+La producción será publicada en ${platform}
+con un estilo ${style} y una duración aproximada
+de ${duration}.
 `;
 
   const script = `
-Escena 1
-Presentación aérea del destino.
+ESCENA 1
+Plano aéreo mostrando el destino.
 
-Escena 2
-Mostrar la experiencia principal.
+ESCENA 2
+Presentación de la experiencia principal.
 
-Escena 3
-Turistas disfrutando.
+ESCENA 3
+Visitantes disfrutando la actividad.
 
-Escena 4
-Llamado a la acción para reservar.
+ESCENA 4
+Invitación a reservar con AquaTour Norcasia.
+
+ESCENA 5
+Logo de AquaTour y llamado a la acción.
 `;
 
   const storyboard = [
-
-    "Drone mostrando el paisaje.",
-
+    `Drone mostrando ${destination}.`,
     "Plano cercano de la experiencia.",
-
-    "Personas disfrutando el recorrido.",
-
-    "Plano final con logo AquaTour."
-
+    "Turistas disfrutando del recorrido.",
+    "Guía interactuando con los visitantes.",
+    "Plano final con logo y llamada a reservar.",
   ];
 
   const instagram = `
-${request.title}
+🌿 ${destination}
 
-Descubre una experiencia inolvidable en Norcasia.
+${objective}.
 
-Reserva ahora.
+Vive una experiencia inolvidable junto a AquaTour Norcasia.
 
+¡Reserva hoy mismo!
 `;
 
   const hashtags = [
-
     "#AquaTourNorcasia",
-
     "#Norcasia",
-
-    "#Turismo",
-
     "#EmbalseAmani",
-
-    "#Colombia"
-
+    "#Turismo",
+    "#Aventura",
+    "#Naturaleza",
+    "#Caldas",
   ];
 
   return {
-
     summary,
-
     script,
-
     storyboard,
-
     instagram,
-
     hashtags,
-
   };
-
 }

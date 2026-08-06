@@ -27,12 +27,16 @@ export function useDirector() {
       });
 
       if (!response.ok) {
-        throw new Error("Error del servidor");
+        throw new Error("No fue posible generar el proyecto.");
       }
 
-      const data: DirectorResponse = await response.json();
+      const api = await response.json();
 
-      setResult(data);
+      if (!api.success) {
+        throw new Error(api.message);
+      }
+
+      setResult(api.project);
     } catch (error) {
       console.error(error);
       alert("No fue posible conectar con Director IA.");

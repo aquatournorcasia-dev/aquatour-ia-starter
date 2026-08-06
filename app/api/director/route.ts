@@ -2,12 +2,30 @@ import { NextResponse } from "next/server";
 
 import { generateProject } from "@/services/director";
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
 
-  const body = await req.json();
+    const project = await generateProject(body);
 
-  const result = await generateProject(body);
+    return NextResponse.json({
+      success: true,
+      project,
+    });
 
-  return NextResponse.json(result);
+  } catch (error) {
 
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "No fue posible generar el proyecto.",
+      },
+      {
+        status: 500,
+      }
+    );
+
+  }
 }
