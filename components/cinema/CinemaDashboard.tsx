@@ -1,23 +1,17 @@
 "use client";
 
-import { ImagePlus } from "lucide-react";
 import { useRef, useState } from "react";
+
+import ImageUploader from "./ImageUploader";
+import BriefForm, { Campaign } from "./BriefForm";
 import DirectorPanel from "../director/DirectorPanel";
 
-type Campaign = {
-  title: string;
-  objective: string;
-  audience: string;
-  platform: string;
-  style: string;
-  duration: string;
-};
+import { useDirector } from "@/hooks/useDirector";
 
 export default function CinemaDashboard() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [image, setImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const [campaign, setCampaign] = useState<Campaign>({
     title: "",
@@ -27,6 +21,8 @@ export default function CinemaDashboard() {
     style: "Cinematográfico",
     duration: "30 segundos",
   });
+
+  const { loading, result, generate } = useDirector();
 
   function openExplorer() {
     inputRef.current?.click();
@@ -46,170 +42,27 @@ export default function CinemaDashboard() {
     reader.readAsDataURL(file);
   }
 
-  async function generate() {
-    setLoading(true);
-
-    await new Promise((r) => setTimeout(r, 2500));
-
-    alert("Aquí conectaremos Director IA en la siguiente Feature.");
-
-    setLoading(false);
-
-    setResult(
-  "Proyecto generado correctamente. Director IA preparó la estructura inicial."
-    );
-  }
-
   return (
     <div className="grid grid-cols-3 gap-8">
 
-      <div>
+      <ImageUploader
+        image={image}
+        inputRef={inputRef}
+        onOpen={openExplorer}
+        onChange={onChange}
+      />
 
-        <div
-          onClick={openExplorer}
-          className="h-[520px] rounded-3xl border-2 border-dashed border-cyan-500 bg-slate-900 cursor-pointer overflow-hidden flex items-center justify-center"
-        >
+      <BriefForm
+        campaign={campaign}
+        loading={loading}
+        onChange={setCampaign}
+        onGenerate={() => generate(campaign, image)}
+      />
 
-          {image ? (
-            <img
-              src={image}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="text-center">
-
-              <ImagePlus
-                size={70}
-                className="mx-auto text-cyan-400"
-              />
-
-              <h2 className="mt-5 text-2xl font-bold">
-                Subir Fotografía
-              </h2>
-
-              <p className="mt-3 text-slate-400">
-                Embalse, río, cascada o experiencia turística
-              </p>
-
-            </div>
-          )}
-
-          <input
-            hidden
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            onChange={onChange}
-          />
-
-        </div>
-
-      </div>
-
-      <div className="rounded-3xl bg-slate-900 p-8 space-y-5">
-        <DirectorPanel
-         loading={loading}
-         result={result}
-        />
-        <h2 className="text-3xl font-bold">
-          Brief Creativo IA
-        </h2>
-
-        <input
-          className="w-full rounded-xl bg-slate-800 p-4"
-          placeholder="Nombre de la campaña"
-          value={campaign.title}
-          onChange={(e) =>
-            setCampaign({
-              ...campaign,
-              title: e.target.value,
-            })
-          }
-        />
-
-        <textarea
-          rows={4}
-          className="w-full rounded-xl bg-slate-800 p-4"
-          placeholder="Objetivo de la campaña"
-          value={campaign.objective}
-          onChange={(e) =>
-            setCampaign({
-              ...campaign,
-              objective: e.target.value,
-            })
-          }
-        />
-
-        <input
-          className="w-full rounded-xl bg-slate-800 p-4"
-          placeholder="Público objetivo"
-          value={campaign.audience}
-          onChange={(e) =>
-            setCampaign({
-              ...campaign,
-              audience: e.target.value,
-            })
-          }
-        />
-
-        <select
-          className="w-full rounded-xl bg-slate-800 p-4"
-          value={campaign.platform}
-          onChange={(e) =>
-            setCampaign({
-              ...campaign,
-              platform: e.target.value,
-            })
-          }
-        >
-          <option>Instagram</option>
-          <option>TikTok</option>
-          <option>Facebook</option>
-          <option>YouTube</option>
-        </select>
-
-        <select
-          className="w-full rounded-xl bg-slate-800 p-4"
-          value={campaign.style}
-          onChange={(e) =>
-            setCampaign({
-              ...campaign,
-              style: e.target.value,
-            })
-          }
-        >
-          <option>Cinematográfico</option>
-          <option>Documental</option>
-          <option>Premium</option>
-          <option>Aventura</option>
-        </select>
-
-        <select
-          className="w-full rounded-xl bg-slate-800 p-4"
-          value={campaign.duration}
-          onChange={(e) =>
-            setCampaign({
-              ...campaign,
-              duration: e.target.value,
-            })
-          }
-        >
-          <option>15 segundos</option>
-          <option>30 segundos</option>
-          <option>60 segundos</option>
-          <option>90 segundos</option>
-        </select>
-
-        <button
-          onClick={generate}
-          disabled={loading}
-          className="w-full rounded-xl bg-cyan-500 p-5 text-xl font-bold hover:bg-cyan-600 disabled:bg-slate-700"
-        >
-          {loading ? "Director IA trabajando..." : "Generar Proyecto IA"}
-        </button>
-
-      </div>
+      <DirectorPanel
+        loading={loading}
+        result={result}
+      />
 
     </div>
   );

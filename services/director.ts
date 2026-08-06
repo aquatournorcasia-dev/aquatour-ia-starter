@@ -7,40 +7,71 @@ export async function generateProject(
   request: DirectorRequest
 ): Promise<DirectorResponse> {
 
+  const summary = `
+Campaña "${request.title}" dirigida a ${request.audience}
+para ${request.platform}.
+`;
+
+  const script = `
+Escena 1
+Presentación aérea del destino.
+
+Escena 2
+Mostrar la experiencia principal.
+
+Escena 3
+Turistas disfrutando.
+
+Escena 4
+Llamado a la acción para reservar.
+`;
+
+  const storyboard = [
+
+    "Drone mostrando el paisaje.",
+
+    "Plano cercano de la experiencia.",
+
+    "Personas disfrutando el recorrido.",
+
+    "Plano final con logo AquaTour."
+
+  ];
+
+  const instagram = `
+${request.title}
+
+Descubre una experiencia inolvidable en Norcasia.
+
+Reserva ahora.
+
+`;
+
+  const hashtags = [
+
+    "#AquaTourNorcasia",
+
+    "#Norcasia",
+
+    "#Turismo",
+
+    "#EmbalseAmani",
+
+    "#Colombia"
+
+  ];
+
   return {
 
-    summary:
-      `Campaña "${request.title}" orientada a ${request.audience}.`,
+    summary,
 
-    script:
-      `Video de ${request.duration} mostrando la experiencia en Norcasia con estilo ${request.style}.`,
+    script,
 
-    storyboard: [
+    storyboard,
 
-      "Drone inicia sobre el embalse",
+    instagram,
 
-      "Lancha navegando",
-
-      "Turistas disfrutando",
-
-      "Cierre con logo AquaTour",
-
-    ],
-
-    instagram:
-      `Descubre una experiencia inolvidable en Norcasia.`,
-
-    hashtags: [
-
-      "#AquaTourNorcasia",
-
-      "#EmbalseAmani",
-
-      "#Turismo",
-
-      "#Colombia"
-
-    ]
+    hashtags,
 
   };
 
