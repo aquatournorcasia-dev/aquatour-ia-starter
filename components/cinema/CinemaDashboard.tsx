@@ -9,6 +9,7 @@ import DirectorPanel from "../director/DirectorPanel";
 import { useDirector } from "@/hooks/useDirector";
 
 export default function CinemaDashboard() {
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [image, setImage] = useState<string | null>(null);
@@ -22,13 +23,20 @@ export default function CinemaDashboard() {
     duration: "30 segundos",
   });
 
-  const { loading, result, generate } = useDirector();
+  const {
+    loading,
+    result,
+    generate,
+  } = useDirector();
 
   function openExplorer() {
     inputRef.current?.click();
   }
 
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function onImageChange(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+
     const file = e.target.files?.[0];
 
     if (!file) return;
@@ -36,27 +44,38 @@ export default function CinemaDashboard() {
     const reader = new FileReader();
 
     reader.onload = () => {
-      setImage(reader.result as string);
+
+      setImage(
+        reader.result as string
+      );
+
     };
 
     reader.readAsDataURL(file);
+
   }
 
   return (
+
     <div className="grid grid-cols-3 gap-8">
 
       <ImageUploader
         image={image}
         inputRef={inputRef}
         onOpen={openExplorer}
-        onChange={onChange}
+        onChange={onImageChange}
       />
 
       <BriefForm
         campaign={campaign}
         loading={loading}
         onChange={setCampaign}
-        onGenerate={() => generate(campaign, image)}
+        onGenerate={() =>
+          generate(
+            campaign,
+            image
+          )
+        }
       />
 
       <DirectorPanel
@@ -65,5 +84,7 @@ export default function CinemaDashboard() {
       />
 
     </div>
+
   );
+
 }
